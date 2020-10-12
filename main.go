@@ -1,15 +1,22 @@
 package main
 
 import (
-	"net/http"
+	"fmt"
 
-	"github.com/labstack/echo/v4"
+	"github.com/go-git/go-git"
 )
 
 func main() {
-	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
-	e.Logger.Fatal(e.Start(":60"))
+
+	// path of the repository
+	// remember the need to check if the path provided is a git repository
+
+	repo, _ := git.PlainOpen(".")
+
+	ref, _ := repo.Head()
+
+	commit, _ := repo.CommitObject(ref.Hash())
+
+	fmt.Println(commit.)
+
 }
