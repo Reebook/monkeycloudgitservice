@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/go-git/go-git"
+	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing/object"
 )
 
 func main() {
@@ -17,6 +18,11 @@ func main() {
 
 	commit, _ := repo.CommitObject(ref.Hash())
 
-	fmt.Println(commit.)
+	files, _ := commit.Files()
+
+	files.ForEach(func(f *object.File) error {
+		fmt.Println(f.Hash, f.Name)
+		return nil
+	})
 
 }
