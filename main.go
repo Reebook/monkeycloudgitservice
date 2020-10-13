@@ -11,11 +11,11 @@ func main() {
 
 	repo, _ := git.PlainOpen(".") // path remember u need to find those repositories
 
-	blobs, _ := repo.BlobObjects() // a git object type check the git documentation
+	objects, _ := repo.Objects()
 
-	blobs.ForEach(func(b *object.Blob) error {
+	objects.ForEach(func(db object.Object) error {
 
-		fmt.Println(b.Hash)
+		fmt.Println(db)
 
 		return nil
 	})
