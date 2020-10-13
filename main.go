@@ -9,20 +9,14 @@ import (
 
 func main() {
 
-	// path of the repository
-	// remember the need to check if the path provided is a git repository
+	repo, _ := git.PlainOpen(".") // path remember u need to find those repositories
 
-	repo, _ := git.PlainOpen(".")
+	blobs, _ := repo.BlobObjects() // a git object type check the git documentation
 
-	ref, _ := repo.Head()
+	blobs.ForEach(func(b *object.Blob) error {
 
-	commit, _ := repo.CommitObject(ref.Hash())
+		fmt.Println(b.Hash)
 
-	files, _ := commit.Files()
-
-	files.ForEach(func(f *object.File) error {
-		fmt.Println(f.Hash, f.Name)
 		return nil
 	})
-
 }
