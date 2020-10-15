@@ -27,7 +27,7 @@ func main() {
 		return nil
 	})
 
-	//Return all branch name
+	//	Return all branch name
 	branchesName, err := getBranches(".")
 	if err != nil {
 		fmt.Println(err)
@@ -44,6 +44,23 @@ func main() {
 	if result {
 		fmt.Println("Exist " + branchName)
 	}
+	InitRepository("/app/Repos/newRepo", false)
+
+	//Initalize a Object Git.CloneOptions
+	option := git.CloneOptions{
+		URL:               "https://github.com/Colibri-code/monkeycloudgitservice",
+		RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
+	}
+	//Initalize a repoCloneOptions
+	repoCloneOptions := RepoCloneOptions{"/app/Repos/test2/",
+		false,
+		"master",
+		false,
+		false,
+		option,
+	}
+	//Clonning a Repository
+	CloneRepository(repoCloneOptions)
 }
 
 //Return all branches specific repository
@@ -80,10 +97,47 @@ func getBranch(repoPath string, branchName string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+
 	_, err = repo.Reference(plumbing.ReferenceName(BranchPrefix+branchName), true)
 	if err != nil {
 		return false, err
 	} else {
 		return true, nil
 	}
+}
+
+// initializes a new Git repository.
+func InitRepository(repoPath string, isBare bool) (*Repository, error) {
+	r, err := git.PlainInit(repoPath, isBare)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &Repository{Path: repoPath,
+		goRepo: r}, nil
+}
+
+func CloneRepository(repoCloneOptions RepoCloneOptions) {
+	_, err := git.PlainClone(repoCloneOptions.dir, false, &repoCloneOptions.cloneOptions)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+//Objects
+// Git Repository
+type Repository struct {
+	Path   string
+	goRepo *git.Repository
+}
+
+type RepoCloneOptions struct {
+	dir          string
+	Bare         bool
+	Branch       string
+	Shared       bool
+	NoCheckout   bool
+	cloneOptions git.CloneOptions
 }
