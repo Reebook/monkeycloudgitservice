@@ -1,12 +1,15 @@
 package examples
 
+// change package to main and put it inside the main.go file if u need to see
+// the running example
+
 import (
 	"fmt"
 
 	"github.com/go-git/go-git/v5"
 )
 
-func commit_example() {
+func main() {
 
 	repo, _ := git.PlainOpen("../monkeytest.git")
 
