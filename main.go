@@ -118,12 +118,16 @@ func InitRepository(repoPath string, isBare bool) (*Repository, error) {
 		goRepo: r}, nil
 }
 
-func CloneRepository(repoCloneOptions RepoCloneOptions) {
-	_, err := git.PlainClone(repoCloneOptions.dir, false, &repoCloneOptions.cloneOptions)
+//CloneRepository clone a repository
+func CloneRepository(repoCloneOptions RepoCloneOptions) (*Repository, error) {
+	repository, err := git.PlainClone(repoCloneOptions.dir, false, &repoCloneOptions.cloneOptions)
 
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
+
+	return &Repository{Path: repoCloneOptions.dir,
+		goRepo: repository}, nil
 }
 
 //Objects
