@@ -60,7 +60,21 @@ func main() {
 		option,
 	}
 	//Clonning a Repository
-	CloneRepository(repoCloneOptions)
+	repository, err := CloneRepository(repoCloneOptions)
+	if err != nil {
+		reposito, _ := git.PlainOpen(repoCloneOptions.dir)
+
+		config, _ := reposito.Config()
+
+		if config != nil {
+			fmt.Println(config)
+		}
+	}
+	//Config Repo
+	if repository != nil {
+		repository.goRepo.Config()
+	}
+
 }
 
 //Return all branches specific repository
