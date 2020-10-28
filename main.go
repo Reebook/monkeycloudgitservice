@@ -60,21 +60,26 @@ func main() {
 		option,
 	}
 	//Clonning a Repository
-	repository, err := CloneRepository(repoCloneOptions)
+	_, err = CloneRepository(repoCloneOptions)
 	if err != nil {
-		reposito, _ := git.PlainOpen(repoCloneOptions.dir)
 
-		config, _ := reposito.Config()
+	}
 
-		if config != nil {
-			fmt.Println(config)
+	//Get git Config in Repository
+	config, _ := repo.Config()
+
+	if config != nil {
+		for i, s := range config.Remotes {
+			fmt.Println(i, s.Name, s.URLs)
+		}
+		for i, s := range config.Submodules {
+			fmt.Println(i, s.Name, s.URL)
+		}
+		fmt.Printf("%v", config.Raw)
+		for i, s := range config.Raw.Sections {
+			fmt.Println(i, s)
 		}
 	}
-	//Config Repo
-	if repository != nil {
-		repository.goRepo.Config()
-	}
-
 }
 
 //Return all branches specific repository
